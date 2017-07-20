@@ -31,10 +31,11 @@ const subTotal = (product) => {
 const summary = (added, currentProduct) => {
     return added + currentProduct.subTotal
 }
+const FIRST_VALUE = 0
 
 const total = products
                 .filter(isGreaterThanZero)
                 .map(subTotal)
-                .reduce(summary, 0)
+                .reduce(summary, FIRST_VALUE)
 
 console.log('Summary: ' + total)
