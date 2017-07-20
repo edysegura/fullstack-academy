@@ -10,10 +10,10 @@
 
 const fs = require('fs')
 const { promisify } = require('util')
-const readdir = promisify(fs.readdir)
+const readdirPromise = promisify(fs.readdir)
 
 const path = './'
 
-readdir(path)
+readdirPromise(path)
 .then(files => console.log(files))
 .catch(error => console.log('An error occurred.'))
