@@ -1,22 +1,33 @@
 const fs = require('fs')
 const { promisify } = require('util')
 const readdirPromise = promisify(fs.readdir)
-const fileStatPromise = promisify(fs.stat)
+const statPromise = promisify(fs.stat)
 
 const path = './'
 
-async function showFilesOnly(file) {
-    const fileStat = await fileStatPromise(file)
-    if(fileStat.isFile()) console.log(file)
-}
-
-async function main() {
-    try {
-        const files = await readdirPromise(path)
-        files.forEach(showFilesOnly)
-    } catch (error) {
-        console.log('An error ocurred.')
+async function stat(file) {
+    const stat = await statPromise(file)
+    return {
+        file,
+        stat
     }
 }
 
-main()
+async function listFiles(path) {
+    try {
+        const all = await readdirPromise(path)
+        const promises = all.map(async (file) => await stat(file))
+        const promisesFulfilled = await Promise.all(promises)
+        
+        const files = promisesFulfilled
+                        .filter(file => file.stat.isFile())
+                        .map(file => file.file)
+        
+        console.log(files)
+    } 
+    catch (error) {
+        console.log('An error ocurred.', error)
+    }
+}
+
+listFiles(path)
