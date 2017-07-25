@@ -32,18 +32,21 @@ const fillData = ({value, rate, months}) => {
     data.projections = []
 }
 
-const projections = (data) => {
-    const t = data.months
-    const monthArray = Array.from(new Array(t), (t, i) => i + 1)
-
-    data.projections = monthArray.map(month => {
+const tableData = (data) => {
+    return function (month) {
         const amount = calculateInterest (
             data.value,
             data.rate / 100,
             month
         )
         return { month, amount }
-    })
+    }
+}
+
+const projections = (data) => {
+    data.projections = Array
+                        .from(new Array(data.months), (t, i) => i + 1)
+                        .map(tableData(data))
 }
 
 //routes
