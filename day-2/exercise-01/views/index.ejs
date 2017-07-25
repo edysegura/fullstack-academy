@@ -7,23 +7,40 @@
     <title><%= title %></title>
 </head>
 <body>
-    <form action="POST">
+    <form action="/calculate" method="GET">
         <fieldset>
             <legend><%= title %></legend>
-            <label for="">
+            <label>
                 Value
-                <input type="text" name="value">
+                <input type="text" name="value" value="<%= value %>" required>
             </label>
-            <label for="">
+            <label>
                 Rate
-                <input type="text" name="rate">
+                <input type="number" min="1" max="100" name="rate" value="<%= rate %>" required>
             </label>
-            <label for="">
+            <label>
                 Months
-                <input type="text" name="months">
+                <input type="number" min="1" name="months" value="<%= months %>" required>
             </label>
             <button type="submit">Calculate</button>
         </fieldset>
     </form>
+    <% if(projections.length) { %>
+    <fieldset>
+        <legend>Projection</legend>
+        <table>
+            <tr>
+                <th>Month</th>
+                <th>Value</th>
+            </tr>
+            <% projections.forEach(projection => { %>
+            <tr>
+                <td><%= projection.month %></td>
+                <td>$ <%= projection.amount.toFixed(2) %></td>
+            </tr>
+            <% }) %>
+        </table>
+    </fieldset>
+    <% } %>
 </body>
 </html>
